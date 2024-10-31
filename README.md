@@ -1,2 +1,1 @@
-# SMP-Stat
-SMP Stat website and API
+# SMP Stat website and API
