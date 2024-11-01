@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -18,4 +19,27 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+*/
+
+body {
+  background: linear-gradient(to bottom, #003022 0%, #000000 15%, #000000 100%);
+
+  color: white;
+}
+
+.title {
+  word-spacing: -20px;
+}
+.title > span {
+  color: #78624d;
+}
+
+a {
+  @apply transition-all duration-200;
+}
+
+.pixel-art {
+  image-rendering: pixelated; /* Ensures no smoothing for crisp edges */
+  image-rendering: crisp-edges; /* Fallback for older browsers */
 }

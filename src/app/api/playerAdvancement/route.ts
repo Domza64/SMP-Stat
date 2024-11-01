@@ -14,15 +14,11 @@ export async function POST(request: Request) {
       serverSecret: data.serverSecret, // Find the server by secret
     },
     {
-      // Increment the deaths count by 1
-      $inc: {
-        "players.$.deaths": 1, // Increment the death count
-      },
-      // Add a new event for the player's death
+      // Add a new event for the player advancement
       $push: {
         events: {
-          type: "death", // Event type
-          text: data.deathMsg, // Death message
+          type: "advancement", // Event type
+          text: data.advancement, // Death message
           player: data.player, // Player associated with the death
           datetime: new Date(), // Current date and time
         },

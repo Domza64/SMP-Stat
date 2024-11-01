@@ -1,18 +1,23 @@
 import mongoose from "mongoose";
 
-// Define the Player interface
 export interface Player {
+  uuid: string;
   name: string;
-  deaths: number; // Change deaths to a single number
+  deaths: number;
+  onlineSince: Date | undefined; // If undefined the player is offline, otherwise the time when player joined
+  lastSeen: Date | undefined;
+  playTime: number; // Decimal number of playtime in hours
 }
 
-// Create the Player Schema
 const PlayerSchema = new mongoose.Schema<Player>({
+  uuid: { type: String, required: true },
   name: { type: String, required: true },
-  deaths: { type: Number, required: true, default: 0 }, // Store number of deaths
+  deaths: { type: Number, required: true, default: 0 },
+  onlineSince: { type: Date, default: undefined },
+  lastSeen: { type: Date, default: undefined },
+  playTime: { type: Number, required: true, default: 0 },
 });
 
-// Define the Event interface
 export interface Event {
   type: string; // Type of the event (e.g., deaths, achievement)
   text: string; // Description of the event
@@ -27,6 +32,7 @@ export interface McServerModel extends mongoose.Document {
   owner: string;
   players: Player[]; // Array of players
   events: Event[]; // Array of events
+  private: boolean;
 }
 
 // Create the McServer Schema
@@ -62,6 +68,7 @@ const McServerSchema = new mongoose.Schema<McServerModel>({
     ],
     default: [], // Default to an empty array
   },
+  private: { type: Boolean, default: true },
 });
 
 // Export the McServer model

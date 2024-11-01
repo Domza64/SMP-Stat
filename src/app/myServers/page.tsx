@@ -44,31 +44,51 @@ export default async function Server() {
   }
 
   return (
-    <div>
-      <h1>Servers:</h1>
-      {userData.servers.map((server: any) => (
-        <Link
-          href={`/server/${server.serverId}`}
-          key={server.serverId}
-          className="p-2 m-2 bg-gray-700 w-max rounded-lg hover:bg-gray-600"
-        >
-          <span>{server.name}</span>
-        </Link>
-      ))}
-      <form
-        action={createServer}
-        className="bg-gray-700 w-max flex flex-col my-12 p-4 gap-2"
-      >
-        <h2 className="text-lg font-bold">Add new server</h2>
-        <input
-          type="text"
-          name="serverName"
-          placeholder="Server Name"
-          className="text-black"
-        />
-        <button className="bg-green-400 text-black">Add Server</button>
-      </form>
-    </div>
+    <section className="flex flex-col w-full max-w-6xl mx-auto py-16">
+      <h1 className="text-3xl font-bold mb-4">My Servers:</h1>
+      <ul className="flex flex-wrap gap-4">
+        {userData.servers.map((server: any) => (
+          <li
+            className="bg-gray-700 rounded-lg hover:bg-gray-600 w-48 h-32"
+            key={server.serverId}
+          >
+            <Link
+              href={`/server/${server.serverId}`}
+              key={server.serverId}
+              className="p-2 flex justify-between h-full flex-col"
+            >
+              <span className="text-2xl font-bold">{server.name}</span>
+              <div className="flex flex-col">
+                <div className="flex justify-between">
+                  <span className="font-semibold">Players online:</span>
+                  <span className="font-semibold text-lg">2/16</span>
+                </div>
+              </div>
+            </Link>
+          </li>
+        ))}
+        <li>
+          <form
+            action={createServer}
+            className="bg-gray-700 rounded-lg w-64 h-32 flex flex-col p-2 gap-2"
+          >
+            <label htmlFor="serverName" className="text-lg font-semibold">
+              Add new server
+            </label>
+            <input
+              type="text"
+              name="serverName"
+              placeholder="Server Name"
+              className="text-black rounded"
+              required
+            />
+            <button className="bg-green-400 text-black rounded p-1 px-2 font-semibold hover:bg-green-300 transition-all">
+              Add Server
+            </button>
+          </form>
+        </li>
+      </ul>
+    </section>
   );
 }
 

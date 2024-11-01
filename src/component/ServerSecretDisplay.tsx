@@ -15,7 +15,7 @@ export default function ServerSecretDisplay({
 
   return (
     <>
-      <button onClick={toggleVisibility}>
+      <button className="bg-gray-700 p-2 rounded-lg" onClick={toggleVisibility}>
         {isVisible ? "Hide Server Secret" : "Show Server Secret"}
       </button>
       {isVisible && (
