@@ -10,7 +10,11 @@ import { redirect } from "next/navigation";
 export default async function Server() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  const userData = await getUserData(user.id);
+  const userData = await getUserData(
+    user.id,
+    user.email as string,
+    user.username as string
+  );
 
   async function createServer(formData: FormData) {
     "use server";
@@ -24,6 +28,7 @@ export default async function Server() {
       serverName,
       serverSecret,
       owner: user.id,
+      allowedUsers: [{ kindeUserId: user.id, username: user.username }],
     });
     // Update the user's servers
     await UserModel.updateOne(
@@ -92,7 +97,11 @@ export default async function Server() {
   );
 }
 
-async function getUserData(kindeUserId: string) {
+async function getUserData(
+  kindeUserId: string,
+  email: string,
+  username: string
+) {
   await dbConnect();
 
   // Fetch the user data
@@ -101,7 +110,11 @@ async function getUserData(kindeUserId: string) {
   });
 
   if (!userData) {
-    userData = await UserModel.create({ kindeUserId: kindeUserId });
+    userData = await UserModel.create({
+      kindeUserId: kindeUserId,
+      email: email,
+      username: username,
+    });
   }
 
   return userData;

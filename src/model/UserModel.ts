@@ -8,6 +8,8 @@ interface Server {
 // Define the McServerModel interface
 interface UserModel extends mongoose.Document {
   kindeUserId: string;
+  email: string;
+  username: string;
   servers: Server[]; // Array of servers
 }
 
@@ -20,6 +22,8 @@ const Server = new mongoose.Schema<Server>({
 // Create the User Schema
 const UserSchema = new mongoose.Schema<UserModel>({
   kindeUserId: { type: String, required: true, index: true },
+  email: { type: String, required: true },
+  username: { type: String, required: true },
   servers: {
     type: [Server],
     default: [], // Default to an empty array

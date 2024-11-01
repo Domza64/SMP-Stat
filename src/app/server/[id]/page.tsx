@@ -7,6 +7,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { playerLastSeen } from "@/lib/TimeUtils";
+import { revalidatePath } from "next/cache";
 
 export default async function Server({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -16,14 +17,19 @@ export default async function Server({ params }: { params: { id: string } }) {
     return <div>Server not found</div>;
   }
 
-  const { getUser, isAuthenticated } = getKindeServerSession();
+  const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  const privateServer = serverData.private;
-  const isUserAuthenticated = await isAuthenticated();
-  if (privateServer && (await !isUserAuthenticated)) {
-    // TODO - Replace with user has access to server instead of just checking if user is authenticated
-    return <div>This is a private server.</div>;
+  if (serverData.private) {
+    var userAllowed = false;
+    serverData.allowedUsers.forEach((u: any) => {
+      if (u.kindeUserId == user.id) {
+        userAllowed = true;
+      }
+    });
+    if (!userAllowed) {
+      return <div>This is a private server.</div>;
+    }
   }
 
   async function deleteServer(formData: FormData) {
@@ -62,11 +68,55 @@ export default async function Server({ params }: { params: { id: string } }) {
     redirect("/myServers");
   }
 
+  async function addUser(formData: FormData) {
+    "use server";
+
+    const { getUser, isAuthenticated } = getKindeServerSession();
+    const actionUser = await getUser();
+
+    if (!isAuthenticated) {
+      redirect("/api/auth/login?post_login_redirect_url=/server/" + id);
+    }
+
+    const mailOrUsername = formData.get("mailOrUsername");
+
+    await dbConnect();
+
+    // Find user in UserModel and create newAllowedUser from it, add server to that user
+    const user = await UserModel.findOneAndUpdate(
+      {
+        $or: [{ email: mailOrUsername }, { username: mailOrUsername }],
+      },
+      {
+        $addToSet: { servers: { serverId: id, name: serverData.serverName } },
+      }
+    );
+
+    if (user) {
+      const newAllowedUser = {
+        kindeUserId: user.kindeUserId,
+        username: user.username,
+      };
+      // Add allowed user to server
+      await McServerModel.findOneAndUpdate(
+        {
+          _id: id,
+          owner: actionUser.id,
+        },
+        { $addToSet: { allowedUsers: newAllowedUser } }
+      );
+
+      revalidatePath("/server/" + id);
+    } else {
+      // TODO - Handle user not found
+    }
+  }
+
   return (
     <section className="p-4 mt-8 w-full max-w-7xl mx-auto">
       <h1 className="text-4xl my-2 font-semibold">{serverData.serverName}</h1>
       <h2 className="my-4 mt-8 text-2xl font-semibold">Players:</h2>
-      <ul className="flex gap-4">
+      <ul className="flex gap-4 flex-wrap">
         {serverData.players
           .sort((a: any, b: any) => {
             const aOnlineSince = a.onlineSince
@@ -160,11 +210,14 @@ export default async function Server({ params }: { params: { id: string } }) {
       </ul>
 
       {user && serverData.owner === user.id && (
-        <>
+        <div className="space-y-4">
           <hr className="my-6 border-gray-600" />
           <h2 className="font-bold text-2xl">Admin stuff: </h2>
           <ServerSecretDisplay serverSecret={serverData.serverSecret} />
-          <form action={deleteServer}>
+          <form action={deleteServer} className="flex flex-col w-max gap-1">
+            <label htmlFor="serverName" className="text-xl font-semibold">
+              Delete server
+            </label>
             <input
               type="text"
               name="serverName"
@@ -174,13 +227,44 @@ export default async function Server({ params }: { params: { id: string } }) {
             />
             <button className="bg-red-400 text-black">Delete</button>
           </form>
-          <span>Server access:</span>
-          <PrivateCheckboxForm
-            key={serverData.private}
-            isPrivate={serverData.private}
-            id={serverData._id.toString()}
-          />
-        </>
+          <h3 className="text-2xl font-bold">Server setttings</h3>
+          <div className="bg-gray-800 w-max p-4">
+            <span>Server access:</span>
+            <PrivateCheckboxForm
+              key={serverData.private}
+              isPrivate={serverData.private}
+              id={serverData._id.toString()}
+            />
+          </div>
+          <div>
+            <h4>Allowed Users:</h4>
+            <ul>
+              {serverData.allowedUsers.map(
+                (allowedUser: any, index: number) => (
+                  <li key={index}>
+                    <span>{allowedUser.username}</span>
+                  </li>
+                )
+              )}
+            </ul>
+            <hr />
+            <form action={addUser} className="flex gap-2 flex-col">
+              <label htmlFor="mailOrUsername" className="text-xl font-semibold">
+                Add user
+              </label>
+              <input
+                type="text"
+                name="mailOrUsername"
+                className="w-max text-black"
+                placeholder="Enter email or username"
+                required
+              />
+              <button className="bg-green-400 w-max text-black p-1 px-3 rounded">
+                Add user
+              </button>
+            </form>
+          </div>
+        </div>
       )}
     </section>
   );

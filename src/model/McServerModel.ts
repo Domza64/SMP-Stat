@@ -9,6 +9,11 @@ export interface Player {
   playTime: number; // Decimal number of playtime in hours
 }
 
+interface AllowedUser {
+  kindeUserId: string;
+  username: string;
+}
+
 const PlayerSchema = new mongoose.Schema<Player>({
   uuid: { type: String, required: true },
   name: { type: String, required: true },
@@ -33,6 +38,7 @@ export interface McServerModel extends mongoose.Document {
   players: Player[]; // Array of players
   events: Event[]; // Array of events
   private: boolean;
+  allowedUsers: AllowedUser[];
 }
 
 // Create the McServer Schema
@@ -69,6 +75,15 @@ const McServerSchema = new mongoose.Schema<McServerModel>({
     default: [], // Default to an empty array
   },
   private: { type: Boolean, default: true },
+  allowedUsers: {
+    type: [
+      {
+        kindeUserId: { type: String, required: true },
+        username: { type: String, required: true },
+      },
+    ],
+    default: [],
+  },
 });
 
 // Export the McServer model

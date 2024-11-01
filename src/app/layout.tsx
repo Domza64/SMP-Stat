@@ -85,7 +85,7 @@ export default async function RootLayout({
             </div>
           </div>
         </header>
-        <main className="pt-12 flex-1">{children}</main>
+        <main className="pt-20 flex-1">{children}</main>
         <footer className="bg-gray-900 text-white py-12 mt-8">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 px-4 text-center lg:text-left">
             {/* About Section */}
