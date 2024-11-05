@@ -8,8 +8,8 @@ import LogoutButton from "@/component/LogoutButton";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "SMP Stat",
-  description: "SMP Stat website",
+  title: "PixelFeed",
+  description: "PixelFeed website",
 };
 
 const poppins = Poppins({
@@ -44,18 +44,18 @@ export default async function RootLayout({
                 width={40}
                 height={40}
               />
-              <span className="text-black hidden lg:block">SMP Stat</span>
+              <span className="text-black">PixelFeed</span>
             </Link>
 
             {/* Navigation Links */}
             <nav className="hidden md:flex gap-6 text-lg font-semibold">
-              <Link href="/myServers" className="hover:text-gray-700">
-                My Servers
+              <Link href="/servers" className="hover:text-gray-700">
+                Servers
               </Link>
-              <Link href="/tutorial" className="hover:text-gray-700">
+              <Link href="/soon" className="hover:text-gray-700">
                 Tutorial
               </Link>
-              <Link href="/install" className="hover:text-gray-700">
+              <Link href="/soon" className="hover:text-gray-700">
                 Install
               </Link>
             </nav>
@@ -85,14 +85,14 @@ export default async function RootLayout({
             {/* About Section */}
             <div>
               <h3 className="text-xl font-bold text-green-400">
-                About SMP Stat
+                About PixelFeed
               </h3>
               <p className="mt-2 text-gray-400">
-                SMP Stat lets all server players track server events and player
+                PixelFeed lets all server players track server events and player
                 stats, providing a real-time overview of gameplay even when
-                you’re offline. With features like leaderboards and much more on
-                the way, SMP Stat is your go-to tool for staying connected with
-                your Minecraft community.
+                you&apos;re offline. With features like leaderboards and much
+                more on the way, PixelFeed is your go-to tool for staying
+                connected with your Minecraft community.
               </p>
             </div>
 
@@ -105,22 +105,22 @@ export default async function RootLayout({
                   </h3>
                   <ul className="mt-2 space-y-2 text-gray-400">
                     <li>
-                      <Link href="/myServers" className="hover:text-green-300">
-                        My Servers
+                      <Link href="/servers" className="hover:text-green-300">
+                        Servers
                       </Link>
                     </li>
                     <li>
-                      <Link href="/tutorial" className="hover:text-green-300">
+                      <Link href="/soon" className="hover:text-green-300">
                         Tutorial
                       </Link>
                     </li>
                     <li>
-                      <Link href="/install" className="hover:text-green-300">
+                      <Link href="/soon" className="hover:text-green-300">
                         Installation Guide
                       </Link>
                     </li>
                     <li>
-                      <Link href="/faq" className="hover:text-green-300">
+                      <Link href="/soon" className="hover:text-green-300">
                         FAQ
                       </Link>
                     </li>
@@ -155,7 +155,7 @@ export default async function RootLayout({
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               <a
-                href="https://github.com/your-username/smp-stat-website"
+                href="https://github.com/Domza64/SMP-Stat"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-green-300 underline"
@@ -163,7 +163,7 @@ export default async function RootLayout({
                 GitHub - Website
               </a>
               <a
-                href="https://github.com/your-username/smp-stat-plugin"
+                href="https://github.com/Domza64/SMP-Stat-Plugin"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-green-300 underline"
@@ -171,7 +171,7 @@ export default async function RootLayout({
                 GitHub - Plugin
               </a>
               <a
-                href="https://curseforge.com/minecraft/bukkit-plugins/smp-stat"
+                href="/soon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-green-300 underline"
@@ -179,7 +179,7 @@ export default async function RootLayout({
                 CurseForge
               </a>
               <a
-                href="https://modrinth.com/plugin/smp-stat"
+                href="/soon"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-green-300 underline"
@@ -192,7 +192,7 @@ export default async function RootLayout({
           {/* Footer Bottom */}
           <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
             <p>
-              © {new Date().getFullYear()} SMP Stat. Made with
+              © {new Date().getFullYear()} PixelFeed. Made with
               <Image
                 src={"/images/heart.png"}
                 alt={"Heart icon"}

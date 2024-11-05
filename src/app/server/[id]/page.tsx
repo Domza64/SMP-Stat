@@ -69,7 +69,7 @@ export default async function Server({ params }: { params: { id: string } }) {
       }
     );
 
-    redirect("/myServers");
+    redirect("/servers");
   }
 
   async function addUser(formData: FormData) {

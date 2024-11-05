@@ -6,7 +6,7 @@ export interface ServerData {
 }
 
 // Define the McServerModel interface
-interface UserModel extends mongoose.Document {
+export interface UserModel extends mongoose.Document {
   kindeUserId: string;
   email: string;
   username: string;

@@ -18,7 +18,7 @@ export default async function Home() {
               <h1
                 className={`text-8xl title text-left text-green-400 ${Minecrafter.className}`}
               >
-                SMP <span>Stat</span>
+                Pixel <span>Feed</span>
               </h1>
               <p className="text-white max-w-lg font-semibold text-left text-xl">
                 Stay connected to your Minecraft server anytime, anywhere—even
@@ -26,10 +26,27 @@ export default async function Home() {
               </p>
               <div className="flex justify-between items-center mt-12">
                 <Link
-                  href={"/myServers"}
+                  href={"/servers"}
                   className="bg-green-400 border-black text-lg border-4 border-dashed hover:bg-green-300 text-black font-bold py-2 px-4 rounded"
                 >
                   Track your server!
+                </Link>
+                <span className="bg-red-400 text-black font-bold px-3 py-1 rounded">
+                  Very Early ALPHA!
+                  <br />
+                  <span className="text-sm font-normal">
+                    Expect imperfections, <br /> unfinished stuff.
+                  </span>
+                </span>
+              </div>
+              <div className="mt-4 flex">
+                <Link
+                  className="text-green-400 hover:text-green-300 underline"
+                  href={
+                    "https://www.pixelfeed.net/server/672a74489b86cdd0bbb7fbc7"
+                  }
+                >
+                  Temp preview
                 </Link>
               </div>
             </div>
@@ -68,13 +85,13 @@ export default async function Home() {
             <div className="max-w-7xl mx-auto">
               {/* Section Title */}
               <h2 className="text-4xl font-bold text-center text-white mb-6">
-                What is <span className="text-green-400">SMP Stat</span>?
+                What is <span className="text-green-400">PixelFeed</span>?
               </h2>
 
               {/* Intro Text */}
               <p className="max-w-4xl mx-auto text-lg font-medium text-center mb-10">
-                SMP Stat is your comprehensive tool for tracking Minecraft
-                server activity. Once installed on your server, SMP Stat
+                PixelFeed is your comprehensive tool for tracking Minecraft
+                server activity. Once installed on your server, PixelFeed
                 continuously monitors player stats, achievements, and events,
                 sending data to this website where it&apos;s displayed in an
                 easy-to-use, real-time dashboard. Stay informed, engage your
@@ -177,24 +194,30 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <section className="max-w-6xl mx-auto px-4 mt-10">
-        <h2 className="text-3xl font-bold text-green-400 text-left mb-4">
-          FAQs
-        </h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint iste
-          voluptas, tempora quo delectus accusantium odio ad. Dignissimos, quod
-          harum ea officia commodi, nisi, suscipit impedit est natus quidem
-          quaerat!
-        </p>
+      <section className="max-w-6xl mx-auto px-4 my-16 space-y-4">
         <h2 className="text-3xl font-bold text-green-400 text-left mb-4 mt-12">
-          Instalation tutorial
+          How to use PixelFeed?
         </h2>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo eligendi
           laboriosam, maiores optio tempora doloribus et, dolores saepe
           accusamus sint voluptatum fugiat assumenda rem cum quidem perferendis
           iure a distinctio.
+        </p>
+        <h3 className="text-2xl font-bold text-green-400 text-left mb-4">
+          Instalation:
+        </h3>
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. In itaque,
+          dolorum esse dolorem minus vel commodi iure, delectus non a eligendi
+          reprehenderit rerum nostrum, cumque labore culpa iusto vero deleniti!
+        </p>
+        <h2 className="text-3xl font-bold text-green-400 text-left">FAQs</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint iste
+          voluptas, tempora quo delectus accusantium odio ad. Dignissimos, quod
+          harum ea officia commodi, nisi, suscipit impedit est natus quidem
+          quaerat!
         </p>
       </section>
     </>
