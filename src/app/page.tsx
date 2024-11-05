@@ -22,7 +22,7 @@ export default async function Home() {
               </h1>
               <p className="text-white max-w-lg font-semibold text-left text-xl">
                 Stay connected to your Minecraft server anytime, anywhere—even
-                when you’re offline!
+                when you&apos;re offline!
               </p>
               <div className="flex justify-between items-center mt-12">
                 <Link
@@ -76,9 +76,9 @@ export default async function Home() {
                 SMP Stat is your comprehensive tool for tracking Minecraft
                 server activity. Once installed on your server, SMP Stat
                 continuously monitors player stats, achievements, and events,
-                sending data to this website where it’s displayed in an
+                sending data to this website where it&apos;s displayed in an
                 easy-to-use, real-time dashboard. Stay informed, engage your
-                community, and enhance gameplay—even when you're offline!
+                community, and enhance gameplay—even when you&apos;re offline!
               </p>
 
               <div className="flex flex-col items-center">

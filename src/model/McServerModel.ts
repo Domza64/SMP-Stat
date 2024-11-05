@@ -9,7 +9,7 @@ export interface Player {
   playTime: number; // Decimal number of playtime in hours
 }
 
-interface AllowedUser {
+export interface AllowedUser {
   kindeUserId: string;
   username: string;
 }

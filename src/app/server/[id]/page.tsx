@@ -1,7 +1,11 @@
 import PrivateCheckboxForm from "@/component/PrivateCheckboxForm";
 import ServerSecretDisplay from "@/component/ServerSecretDisplay";
 import dbConnect from "@/lib/dbConnect";
-import McServerModel, { Player, Event } from "@/model/McServerModel";
+import McServerModel, {
+  Player,
+  Event,
+  AllowedUser,
+} from "@/model/McServerModel";
 import UserModel from "@/model/UserModel";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
@@ -21,8 +25,8 @@ export default async function Server({ params }: { params: { id: string } }) {
   const user = await getUser();
 
   if (serverData.private) {
-    var userAllowed = false;
-    serverData.allowedUsers.forEach((u: any) => {
+    let userAllowed = false;
+    serverData.allowedUsers.forEach((u: AllowedUser) => {
       if (u.kindeUserId == user.id) {
         userAllowed = true;
       }
@@ -118,7 +122,7 @@ export default async function Server({ params }: { params: { id: string } }) {
       <h2 className="my-4 mt-8 text-2xl font-semibold">Players:</h2>
       <ul className="flex gap-4 flex-wrap">
         {serverData.players
-          .sort((a: any, b: any) => {
+          .sort((a: Player, b: Player) => {
             const aOnlineSince = a.onlineSince
               ? new Date(a.onlineSince).getTime()
               : -Infinity;
@@ -240,7 +244,7 @@ export default async function Server({ params }: { params: { id: string } }) {
             <h4>Allowed Users:</h4>
             <ul>
               {serverData.allowedUsers.map(
-                (allowedUser: any, index: number) => (
+                (allowedUser: AllowedUser, index: number) => (
                   <li key={index}>
                     <span>{allowedUser.username}</span>
                   </li>

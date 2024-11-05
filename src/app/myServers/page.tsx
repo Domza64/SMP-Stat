@@ -2,10 +2,10 @@ import dbConnect from "@/lib/dbConnect";
 import McServerModel from "@/model/McServerModel";
 import UserModel from "@/model/UserModel";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import crypto from "crypto";
 import { redirect } from "next/navigation";
+import { ServerData } from "@/model/UserModel";
 
 export default async function Server() {
   const { getUser } = getKindeServerSession();
@@ -52,7 +52,7 @@ export default async function Server() {
     <section className="flex flex-col w-full max-w-6xl mx-auto py-16">
       <h1 className="text-3xl font-bold mb-4">My Servers:</h1>
       <ul className="flex flex-wrap gap-4">
-        {userData.servers.map((server: any) => (
+        {userData.servers.map((server: ServerData) => (
           <li
             className="bg-gray-700 rounded-lg hover:bg-gray-600 w-48 h-32"
             key={server.serverId}
@@ -105,7 +105,7 @@ async function getUserData(
   await dbConnect();
 
   // Fetch the user data
-  var userData = await UserModel.findOne({
+  let userData = await UserModel.findOne({
     kindeUserId: kindeUserId,
   });
 

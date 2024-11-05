@@ -6,7 +6,6 @@ import LoginButton from "@/component/LoginButton";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import LogoutButton from "@/component/LogoutButton";
 import Image from "next/image";
-import localFont from "next/font/local";
 
 export const metadata: Metadata = {
   title: "SMP Stat",
@@ -16,11 +15,6 @@ export const metadata: Metadata = {
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-});
-
-const minecraft = localFont({
-  src: "./fonts/Minecraft.ttf",
-  weight: "100 900",
 });
 
 export default async function RootLayout({

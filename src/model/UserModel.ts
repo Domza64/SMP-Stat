@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface Server {
+export interface ServerData {
   name: string;
   serverId: string;
 }
@@ -10,11 +10,11 @@ interface UserModel extends mongoose.Document {
   kindeUserId: string;
   email: string;
   username: string;
-  servers: Server[]; // Array of servers
+  servers: ServerData[]; // Array of servers
 }
 
 // Create the Server Schema
-const Server = new mongoose.Schema<Server>({
+const Server = new mongoose.Schema<ServerData>({
   name: { type: String, required: true },
   serverId: { type: String, required: true },
 });
