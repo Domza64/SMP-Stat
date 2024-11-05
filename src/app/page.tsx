@@ -11,7 +11,7 @@ const Minecrafter = localFont({
 export default async function Home() {
   return (
     <>
-      <section className="mt-24 md:mt-48 p-4 pb-0">
+      <section className="mt-16 md:mt-48 p-4 pb-0">
         <div className="w-full flex justify-between max-w-7xl mx-auto">
           <div className="text-center flex flex-col justify-center items-start w-full lg:w-2/3">
             <div className="w-fullflex flex-col items-start">

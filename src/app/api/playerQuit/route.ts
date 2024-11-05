@@ -17,7 +17,10 @@ export async function POST(request: Request) {
   );
 
   if (!server || !server.players || server.players.length === 0) {
-    return new NextResponse("Player not found", { status: 404 });
+    return new NextResponse(
+      "Player or server not found: Please make sure that server secret is setup corectly",
+      { status: 404 }
+    );
   }
 
   const player = server.players[0];

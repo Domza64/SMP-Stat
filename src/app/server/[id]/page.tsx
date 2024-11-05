@@ -232,42 +232,51 @@ export default async function Server({ params }: { params: { id: string } }) {
             <button className="bg-red-400 text-black">Delete</button>
           </form>
           <h3 className="text-2xl font-bold">Server setttings</h3>
-          <div className="bg-gray-800 w-max p-4">
+          <div className="bg-gray-800 p-4">
             <span>Server access:</span>
             <PrivateCheckboxForm
               key={serverData.private}
               isPrivate={serverData.private}
               id={serverData._id.toString()}
             />
+            <span className="w-32">
+              info: <br /> - Anyone with the link can see public server. <br />{" "}
+              - Private servers can only be seen by users on allowed users list
+            </span>
           </div>
-          <div>
-            <h4>Allowed Users:</h4>
-            <ul>
-              {serverData.allowedUsers.map(
-                (allowedUser: AllowedUser, index: number) => (
-                  <li key={index}>
-                    <span>{allowedUser.username}</span>
-                  </li>
-                )
-              )}
-            </ul>
-            <hr />
-            <form action={addUser} className="flex gap-2 flex-col">
-              <label htmlFor="mailOrUsername" className="text-xl font-semibold">
-                Add user
-              </label>
-              <input
-                type="text"
-                name="mailOrUsername"
-                className="w-max text-black"
-                placeholder="Enter email or username"
-                required
-              />
-              <button className="bg-green-400 w-max text-black p-1 px-3 rounded">
-                Add user
-              </button>
-            </form>
-          </div>
+          {serverData.private && (
+            <div>
+              <h4>Allowed Users:</h4>
+              <ul>
+                {serverData.allowedUsers.map(
+                  (allowedUser: AllowedUser, index: number) => (
+                    <li key={index}>
+                      <span>{allowedUser.username}</span>
+                    </li>
+                  )
+                )}
+              </ul>
+              <hr />
+              <form action={addUser} className="flex gap-2 flex-col">
+                <label
+                  htmlFor="mailOrUsername"
+                  className="text-xl font-semibold"
+                >
+                  Add user
+                </label>
+                <input
+                  type="text"
+                  name="mailOrUsername"
+                  className="w-max text-black"
+                  placeholder="Enter email or username"
+                  required
+                />
+                <button className="bg-green-400 w-max text-black p-1 px-3 rounded">
+                  Add user
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </section>
