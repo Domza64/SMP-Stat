@@ -61,14 +61,19 @@ export default async function RootLayout({
             </nav>
 
             {/* User Auth Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {isUserAuthenticated ? (
                 <>
                   <span className="text-md text-black">
                     Hello, {user.username}!
                   </span>
-                  <LogoutButton className="bg-black hover:bg-gray-800 text-white font-bold py-1 px-3 rounded">
-                    Logout
+                  <LogoutButton className="hover:scale-110">
+                    <Image
+                      src={"/images/logout.svg"}
+                      alt={"Logout icon"}
+                      width={26}
+                      height={26}
+                    />
                   </LogoutButton>
                 </>
               ) : (

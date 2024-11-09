@@ -30,8 +30,7 @@ export interface Event {
   datetime: Date; // Date and time of the event
 }
 
-// Define the McServerModel interface
-export interface McServerModel extends mongoose.Document {
+export interface IMcServerModel {
   serverName: string;
   serverSecret: string;
   owner: string;
@@ -40,6 +39,9 @@ export interface McServerModel extends mongoose.Document {
   private: boolean;
   allowedUsers: AllowedUser[];
 }
+
+// Define the McServerModel interface
+export interface McServerModel extends IMcServerModel, mongoose.Document {}
 
 // Create the McServer Schema
 const McServerSchema = new mongoose.Schema<McServerModel>({

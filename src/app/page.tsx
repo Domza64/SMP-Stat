@@ -31,19 +31,12 @@ export default async function Home() {
                 >
                   Track your server!
                 </Link>
-                <span className="bg-red-400 text-black font-bold px-3 py-1 rounded">
-                  Very Early ALPHA!
-                  <br />
-                  <span className="text-sm font-normal">
-                    Expect imperfections, <br /> unfinished stuff.
-                  </span>
-                </span>
               </div>
               <div className="mt-4 flex">
                 <Link
                   className="text-green-400 hover:text-green-300 underline"
                   href={
-                    "https://www.pixelfeed.net/server/672a74489b86cdd0bbb7fbc7"
+                    "https://www.pixelfeed.net/server/672ff07c8d72836b7417c924"
                   }
                 >
                   Temp preview
@@ -65,6 +58,12 @@ export default async function Home() {
         </div>
         <div className="text-center mt-16">
           <div className="text-xl flex flex-col items-center">
+            <div className="bg-yellow-400 text-black font-bold px-2 mb-4 flex flex-col items-center py-0.5 rounded">
+              <strong>Very Early ALPHA!</strong>
+              <span className="text-sm font-normal">
+                Expect imperfections, unfinished stuff.
+              </span>
+            </div>
             <span className="text-green-400 text-2xl">ALREADY TRACKING</span>
             <div className="flex items-center gap-4">
               <div>
@@ -148,49 +147,24 @@ export default async function Home() {
             Dashboard Previews
           </h2>
 
-          <div className="grid gap-24 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Mobile Dashboard - Single Column */}
-            <div className="sm:col-span-2 lg:col-span-1">
-              <h3 className="text-2xl font-bold text-left mb-8">Mobile</h3>
-              <Image
-                src="/images/mobile_dashboard.png"
-                alt="Mobile Dashboard Preview"
-                width={400}
-                height={800}
-                className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2"
-              />
-            </div>
-
-            {/* Desktop Dashboard - Large Preview */}
-            <div className="sm:col-span-2 lg:col-span-2">
-              <h3 className="text-2xl font-bold text-left mb-8">Desktop</h3>
-              <Image
-                src="/images/dashboard.png"
-                alt="Desktop Dashboard Preview"
-                width={800}
-                height={400}
-                className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2 my-2"
-              />
-              {/* Individual Dashboard Components */}
-              <div className="lg:col-span-1">
-                <Image
-                  src="/images/players.png"
-                  alt="Players Component Preview"
-                  width={400}
-                  height={400}
-                  className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2 my-2"
-                />
-              </div>
-              <div className="lg:col-span-1">
-                <Image
-                  src="/images/events.png"
-                  alt="Events Component Preview"
-                  width={400}
-                  height={400}
-                  className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2 my-2"
-                />
-              </div>
-            </div>
+          {/* Individual Dashboard Components */}
+          <div className="lg:col-span-1">
+            <Image
+              src="/images/players.png"
+              alt="Players Component Preview"
+              width={400}
+              height={400}
+              className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2 my-2"
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <Image
+              src="/images/events.png"
+              alt="Events Component Preview"
+              width={400}
+              height={400}
+              className="w-full h-auto rounded shadow-lg object-cover border-green-400 border-2 my-2"
+            />
           </div>
         </div>
       </section>
