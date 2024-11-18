@@ -11,7 +11,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { playerLastSeen } from "@/lib/TimeUtils";
-import { revalidatePath } from "next/cache";
 import AddUserForm from "@/component/AddUserForm";
 
 export default async function Server({ params }: { params: { id: string } }) {
@@ -127,7 +126,7 @@ export default async function Server({ params }: { params: { id: string } }) {
         {serverData.serverName}
       </h1>
       <h2 className="mb-4 mt-16 text-3xl font-semibold uppercase text-center border-t-2 p-2 border-x-2 border-green-700">
-        The Realm's Heroes
+        The Realm&apos;s Heroes
       </h2>
       <ul className="grid grid-cols-2 justify-center gap-4 sm:flex flex-wrap">
         {serverData.players
@@ -289,8 +288,8 @@ export default async function Server({ params }: { params: { id: string } }) {
               </a>
             </span>
             <span className="mb-4 italic font-medium">
-              Note - Anyone with this secret key can add data here, so don't
-              share it.
+              Note - Anyone with this secret key can add data here, so
+              don&apos;t share it.
             </span>
             <ServerSecretDisplay serverSecret={serverData.serverSecret} />
           </div>
