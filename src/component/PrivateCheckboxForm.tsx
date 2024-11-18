@@ -22,8 +22,7 @@ export default function PrivateCheckboxForm({
   };
 
   return (
-    <form action={updateServerAccess}>
-      <label htmlFor="isPrivate">private server</label>
+    <form action={updateServerAccess} className="flex gap-2">
       <input type="hidden" name="id" value={id} />
       <input
         name="isPrivate"
@@ -32,7 +31,9 @@ export default function PrivateCheckboxForm({
         onChange={handleCheckboxChange}
       />
       {showSaveButton && (
-        <button className="bg-green-400 text-black">Save</button>
+        <button className="font-medium text-green-400 hover:text-green-500 underline">
+          Save changes
+        </button>
       )}
     </form>
   );

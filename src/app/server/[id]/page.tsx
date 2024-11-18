@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { playerLastSeen } from "@/lib/TimeUtils";
 import { revalidatePath } from "next/cache";
+import AddUserForm from "@/component/AddUserForm";
 
 export default async function Server({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -26,11 +27,17 @@ export default async function Server({ params }: { params: { id: string } }) {
 
   if (serverData.private) {
     let userAllowed = false;
-    serverData.allowedUsers.forEach((u: AllowedUser) => {
-      if (u.kindeUserId == user.id) {
-        userAllowed = true;
-      }
-    });
+
+    if (serverData.owner == user.id) {
+      userAllowed = true;
+    } else {
+      serverData.allowedUsers.forEach((u: AllowedUser) => {
+        if (u.kindeUserId == user.id) {
+          userAllowed = true;
+        }
+      });
+    }
+
     if (!userAllowed) {
       return <div>This is a private server.</div>;
     }
@@ -72,7 +79,7 @@ export default async function Server({ params }: { params: { id: string } }) {
     redirect("/servers");
   }
 
-  async function addUser(formData: FormData) {
+  async function removeAllowedUser(formData: FormData) {
     "use server";
 
     const { getUser, isAuthenticated } = getKindeServerSession();
@@ -82,45 +89,47 @@ export default async function Server({ params }: { params: { id: string } }) {
       redirect("/api/auth/login?post_login_redirect_url=/server/" + id);
     }
 
-    const mailOrUsername = formData.get("mailOrUsername");
+    const kindeUserId = formData.get("kindeUserId");
+    if (!kindeUserId) {
+      redirect("/server/" + id);
+    }
 
     await dbConnect();
-
-    // Find user in UserModel and create newAllowedUser from it, add server to that user
     const user = await UserModel.findOneAndUpdate(
       {
-        $or: [{ email: mailOrUsername }, { username: mailOrUsername }],
+        kindeUserId,
       },
       {
-        $addToSet: { servers: { serverId: id, name: serverData.serverName } },
+        $pull: {
+          servers: { serverId: id },
+        },
       }
     );
 
-    if (user) {
-      const newAllowedUser = {
-        kindeUserId: user.kindeUserId,
-        username: user.username,
-      };
-      // Add allowed user to server
-      await McServerModel.findOneAndUpdate(
-        {
-          _id: id,
-          owner: actionUser.id,
+    await McServerModel.updateOne(
+      {
+        _id: id,
+        owner: actionUser.id,
+      },
+      {
+        $pull: {
+          allowedUsers: { kindeUserId: user.kindeUserId },
         },
-        { $addToSet: { allowedUsers: newAllowedUser } }
-      );
+      }
+    );
 
-      revalidatePath("/server/" + id);
-    } else {
-      // TODO - Handle user not found
-    }
+    redirect("/server/" + id);
   }
 
   return (
-    <section className="p-4 mt-8 w-full max-w-7xl mx-auto">
-      <h1 className="text-4xl my-2 font-semibold">{serverData.serverName}</h1>
-      <h2 className="my-4 mt-8 text-2xl font-semibold">Players:</h2>
-      <ul className="flex gap-4 flex-wrap">
+    <section className="p-4 mt-12 w-full max-w-7xl mx-auto">
+      <h1 className="text-5xl font-bold bg-gradient-to-r from-green-200 via-green-500 to-green-950 bg-clip-text text-transparent text-center uppercase">
+        {serverData.serverName}
+      </h1>
+      <h2 className="mb-4 mt-16 text-3xl font-semibold uppercase text-center border-t-2 p-2 border-x-2 border-green-700">
+        The Realm's Heroes
+      </h2>
+      <ul className="grid grid-cols-2 justify-center gap-4 sm:flex flex-wrap">
         {serverData.players
           .sort((a: Player, b: Player) => {
             const aOnlineSince = a.onlineSince
@@ -135,7 +144,7 @@ export default async function Server({ params }: { params: { id: string } }) {
           .map((player: Player) => (
             <li
               key={player.uuid}
-              className="bg-gray-800 p-2 rounded w-52 flex flex-col justify-between"
+              className="bg-gray-800 p-2 rounded flex flex-col justify-between max-w-80 h-52"
             >
               <div className="mb-4 flex flex-col items-center">
                 <Image
@@ -148,12 +157,12 @@ export default async function Server({ params }: { params: { id: string } }) {
               </div>
               <div>
                 <div>
-                  <span className="font-medium">Deaths: </span>
-                  <span>{player.deaths}</span>
+                  <span>Deaths: </span>
+                  <span className="font-semibold">{player.deaths}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Playtime: </span>
-                  <span>
+                  <span>Playtime: </span>
+                  <span className="font-medium">
                     {Math.round(player.playTime * 2) / 2 === 0
                       ? "less than 30 min"
                       : `${Math.round(player.playTime * 2) / 2}h`}
@@ -161,8 +170,10 @@ export default async function Server({ params }: { params: { id: string } }) {
                 </div>
                 {!player.onlineSince && player.lastSeen ? (
                   <>
-                    <span className="font-medium">Last seen: </span>
-                    <span>{playerLastSeen(player.lastSeen)}</span>
+                    <span>Last seen: </span>
+                    <span className="font-medium">
+                      {playerLastSeen(player.lastSeen)}
+                    </span>
                   </>
                 ) : (
                   <span className="text-green-400">Online</span>
@@ -171,7 +182,9 @@ export default async function Server({ params }: { params: { id: string } }) {
             </li>
           ))}
       </ul>
-      <h2 className="my-4 text-2xl font-semibold">Server Events:</h2>
+      <h2 className="mb-4 mt-16 text-3xl font-semibold uppercase text-center border-t-2 p-2 border-x-2 border-green-700">
+        The Event Log
+      </h2>
       <ul className="space-y-4">
         {serverData.events.reverse().map((event: Event, index: number) => (
           <li
@@ -214,69 +227,94 @@ export default async function Server({ params }: { params: { id: string } }) {
       </ul>
 
       {user && serverData.owner === user.id && (
-        <div className="space-y-4">
+        <div className="space-y-4 border-gray-600 border rounded p-4 mt-24">
+          <h2 className="font-bold text-2xl text-center uppercase">
+            Server Settings
+          </h2>
           <hr className="my-6 border-gray-600" />
-          <h2 className="font-bold text-2xl">Admin stuff: </h2>
-          <ServerSecretDisplay serverSecret={serverData.serverSecret} />
-          <form action={deleteServer} className="flex flex-col w-max gap-1">
-            <label htmlFor="serverName" className="text-xl font-semibold">
-              Delete server
-            </label>
-            <input
-              type="text"
-              name="serverName"
-              placeholder="Enter server name here"
-              className="text-black"
-              required
-            />
-            <button className="bg-red-400 text-black">Delete</button>
-          </form>
-          <h3 className="text-2xl font-bold">Server setttings</h3>
-          <div className="bg-gray-800 p-4">
-            <span>Server access:</span>
-            <PrivateCheckboxForm
-              key={serverData.private}
-              isPrivate={serverData.private}
-              id={serverData._id.toString()}
-            />
-            <span className="w-32">
-              info: <br /> - Anyone with the link can see public server. <br />{" "}
-              - Private servers can only be seen by users on allowed users list
+          <div>
+            <h3 className="font-semibold text-xl">Server visibility</h3>
+            <span>
+              Anyone with the link can see public server. Private servers can
+              only be seen by users on allowed users list
             </span>
+            <div className="flex gap-2">
+              <span className="font-semibold">Private Server</span>
+              <PrivateCheckboxForm
+                key={serverData.private}
+                isPrivate={serverData.private}
+                id={serverData._id.toString()}
+              />
+            </div>
           </div>
+          <hr className="my-6 border-gray-600" />
           {serverData.private && (
             <div>
-              <h4>Allowed Users:</h4>
-              <ul>
+              <h3 className="font-semibold text-xl">
+                Users with acces to this server:
+              </h3>
+              <ul className="flex gap-3">
                 {serverData.allowedUsers.map(
                   (allowedUser: AllowedUser, index: number) => (
-                    <li key={index}>
+                    <li key={index} className="flex gap-1">
                       <span>{allowedUser.username}</span>
+                      <form action={removeAllowedUser}>
+                        <input
+                          type="hidden"
+                          name="kindeUserId"
+                          value={allowedUser.kindeUserId}
+                        />
+                        <button className="text-red-400 hover:text-red-500">
+                          R
+                        </button>
+                      </form>
                     </li>
                   )
                 )}
               </ul>
-              <hr />
-              <form action={addUser} className="flex gap-2 flex-col">
-                <label
-                  htmlFor="mailOrUsername"
-                  className="text-xl font-semibold"
-                >
-                  Add user
-                </label>
-                <input
-                  type="text"
-                  name="mailOrUsername"
-                  className="w-max text-black"
-                  placeholder="Enter email or username"
-                  required
-                />
-                <button className="bg-green-400 w-max text-black p-1 px-3 rounded">
-                  Add user
-                </button>
-              </form>
+              <AddUserForm serverId={id} serverName={serverData.serverName} />
+              <hr className="my-6 border-gray-600" />
             </div>
           )}
+          <div className="flex flex-col items-start">
+            <h3 className="font-semibold text-xl">Server secret</h3>
+            <span>
+              To connect your Minecraft server, you need to add this secret key
+              to your minecraft plugin/mod configuration.{" "}
+              <a
+                href="/tutorial#key"
+                className="underline text-green-400 hover:text-green-500"
+              >
+                Instructions
+              </a>
+            </span>
+            <span className="mb-4 italic font-medium">
+              Note - Anyone with this secret key can add data here, so don't
+              share it.
+            </span>
+            <ServerSecretDisplay serverSecret={serverData.serverSecret} />
+          </div>
+          <hr className="my-6 border-gray-600" />
+          <form action={deleteServer} className="flex flex-col w-max gap-2">
+            <label
+              htmlFor="serverName"
+              className="text-xl font-semibold text-red-400"
+            >
+              Delete server
+            </label>
+            <div className="flex gap-2 flex-col sm:flex-row">
+              <input
+                type="text"
+                name="serverName"
+                placeholder="Enter server name here"
+                className="text-white bg-slate-950 p-1 px-3 rounded border-red-400 border-2 border-dashed"
+                required
+              />
+              <button className="bg-red-400 hover:bg-red-500 py-1 px-3 rounded font-medium max-w-max text-black">
+                Delete Server
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </section>

@@ -15,11 +15,14 @@ export default function ServerSecretDisplay({
 
   return (
     <>
-      <button className="bg-gray-700 p-2 rounded-lg" onClick={toggleVisibility}>
+      <button className="underline" onClick={toggleVisibility}>
         {isVisible ? "Hide Server Secret" : "Show Server Secret"}
       </button>
       {isVisible && (
-        <span className="bg-gray-700 p-2 rounded-lg">{serverSecret}</span>
+        <div className="rounded border border-gray-600 mt-2 p-2 bg-gray-800 flex gap-4">
+          <span>{serverSecret}</span>
+          <button className="underline cursor-pointer">Copy</button>
+        </div>
       )}
     </>
   );
